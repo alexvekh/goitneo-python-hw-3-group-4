@@ -100,56 +100,46 @@ def parse_input(user_input):
     return cmd, *args
 
 @input_error
-def add_contact(args, book):
+def add_contact(args, contacts):
     name, phone = args
-    record = Record(name)
-    record.add_phone(phone)
-    book.add_record(record)
-  #  print("book", book)
-  #  print("record", record)
+    contacts[name] = phone
     return "Contact added."
 
 @input_error
-def change_contact(args, book):
+def change_contact(args, contacts):
     name, phone = args
-    if name in book:
-        record = book[name]
-        record.phones = []
-        record.add_phone(phone)
+    if name in contacts:
+        contacts[name] = phone
         return "Contact updated."
     else:
-        return "Sorry, " + name + " isn't exist."
+        return "Sorry, " + {name} + " isn't exist."
 
 @input_error
-def show_phone(args, book):
-    name, = args
-    if name in book:
-        record = book[name]
-        # Out         print(record)
-        res = []
-        for phone in record.phones:
-            res.append(phone.value)
-        return f"{name}: {','.join(res)}"
+def show_phone(args, contacts):
+    name = args
+    if name in contacts:
+        phone = contacts[name]
+        return "{name}: {phone}"
     else:
         return "Sorry, {name} isn't exist. Use 'add' for append this contact."
     
-def show_all(book):
+def show_all(contacts):
     res = []
     res.append("{:^20}".format("CONTACTS"))
     res.append("{:^20}".format("-"*10))
-    for name, phone in book.items():
+    for name, phone in contacts.items():
         res.append("{:<8} {} ".format(name+":", phone))
     res.append("{:^20}".format("="*20))
     return "\n".join(res)
 
 @input_error
-def add_birthday(args, book):
+def add_birthday(args, contacts):
     name = args
-    if name in book:
-        phone = book[name]
-        return f"{name}: {phone}"
+    if name in contacts:
+        phone = contacts[name]
+        return "{name}: {phone}"
     else:
-        return f"Sorry, {name} isn't exist. Use 'add' for append this contact."
+        return "Sorry, {name} isn't exist. Use 'add' for append this contact."
 
 def show_commands():
     commands = {
@@ -172,7 +162,7 @@ def show_commands():
 def main():
     
     book = AddressBook()
-    book = book
+    contacts = book
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
@@ -187,19 +177,19 @@ def main():
         elif command == "help":
             print(show_commands())
         elif command == "add":
-            print(add_contact(args, book))
+            print(add_contact(args, contacts))
         elif command == "change":
-            print(change_contact(args, book))
+            print(change_contact(args, contacts))
         elif command == "phone":
-            print(show_phone(args, book))
+            print(show_phone(args, contacts))
         elif command == "all":
-            print(show_all(book))
+            print(show_all(contacts))
         elif command == "add-birthday":
-            print(add_birthday(args, book))
+            print(add_birthday(args, contacts))
         elif command == "show-birthday":
-            print(show_birthday(args, book))
+            print(show_birthday(args, contacts))
         elif command == "birthdays":
-            print(berthdays(book))
+            print(berthdays(contacts))
         else:
             print("Invalid command. Enter \"help\" for help")
 
