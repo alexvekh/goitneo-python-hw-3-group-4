@@ -7,10 +7,7 @@ def get_birthdays_per_week(users):    # get users with next 7 days birthdays
     today = datetime.today().date()
     for user in users:
         name = user["name"]
-        # if type(user["birthday"]) == str:
-        birthday = user["birthday"].date()  # Convert str to date
-        # else:
-        #     birthday = user["birthday"]
+        birthday = user["birthday"]
         birthday_this_year = birthday.replace(year=today.year)
 
         # if this year birthday pass find next year
